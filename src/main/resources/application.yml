@@ -1,0 +1,48 @@
+server:
+    port: 8082
+
+spring:
+    application:
+        name: idea-hub
+
+    datasource:
+        url: jdbc:postgresql://localhost:5433/together?currentSchema=ideahub
+        username: ${DB_USERNAME:postgres}
+        password: ${DB_PASSWORD:postgres}
+
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: false
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                default_batch_fetch_size: 20
+
+    servlet:
+        multipart:
+            max-file-size: 10MB
+            max-request-size: 30MB
+
+storage:
+    endpoint: ${S3_ENDPOINT:http://localhost:9000}
+    bucket: ${S3_BUCKET:idea-hub}
+    access-key: ${S3_ACCESS_KEY:minioadmin}
+    secret-key: ${S3_SECRET_KEY:minioadmin}
+    region: ${S3_REGION:us-east-1}
+    presigned-url-ttl-minutes: 60
+    server-side-upload: ${STORAGE_SERVER_SIDE:true}
+
+ideas:
+    page-size-default: 20
+    page-size-max: 100
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: health, info, metrics
+
+logging:
+    level:
+        com.project.ideahub: DEBUG
