@@ -193,7 +193,7 @@ public class IdeaService {
 
     private IdeaDto.Summary toSummary(Idea idea) {
         String coverUrl = idea.getPhotos().isEmpty() ? null
-                : storageService.getPublicUrl(idea.getPhotos().get(0).getS3Key());
+                : storageService.getPublicUrl(idea.getPhotos().iterator().next().getS3Key());
 
         return IdeaDto.Summary.builder()
                 .id(idea.getId())

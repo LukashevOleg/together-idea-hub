@@ -8,7 +8,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "ideas", indexes = {
@@ -76,10 +78,10 @@ public class Idea {
     @OneToMany(mappedBy = "idea", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("sortOrder ASC")
     @Builder.Default
-    private List<IdeaPhoto> photos = new ArrayList<>();
+    private Set<IdeaPhoto> photos = new HashSet<>();
 
     @OneToMany(mappedBy = "idea", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
-    private List<IdeaTag> ideaTags = new ArrayList<>();
+    private Set<IdeaTag> ideaTags = new HashSet<>();
 
 }
