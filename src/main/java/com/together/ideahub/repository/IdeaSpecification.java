@@ -9,10 +9,6 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Динамические фильтры для GET /ideas.
- * Каждый параметр опциональный — если не передан, не добавляем в WHERE.
- */
 public class IdeaSpecification {
 
     public static Specification<Idea> withFilters(IdeaFilterRequest filter) {
@@ -59,6 +55,11 @@ public class IdeaSpecification {
             // Только пользовательские или только платформенные
             if (filter.getIsUserCreated() != null) {
                 predicates.add(cb.equal(root.get("isUserCreated"), filter.getIsUserCreated()));
+            }
+
+            // Cursor-based пагинация для свайп-ленты
+            if (filter.getAfterId() != null) {
+                predicates.add(cb.greaterThan(root.get("id"), filter.getAfterId()));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

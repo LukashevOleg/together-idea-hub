@@ -38,7 +38,10 @@ public class IdeaService {
     @Transactional(readOnly = true)
     public PageResponse<IdeaDto.Summary> getIdeas(IdeaFilterRequest filter) {
         int size = Math.min(filter.getSize(), pageSizeMax);
-        Sort sort = buildSort(filter.getSortBy(), filter.getSortDir());
+        // Cursor-mode: всегда сортируем по id ASC чтобы гарантировать порядок
+        Sort sort = filter.getAfterId() != null
+                ? Sort.by(Sort.Direction.ASC, "id")
+                : buildSort(filter.getSortBy(), filter.getSortDir());
         Pageable pageable = PageRequest.of(filter.getPage(), size, sort);
 
         Page<Idea> page = ideaRepository.findAll(
@@ -129,9 +132,8 @@ public class IdeaService {
         int nextOrder = idea.getPhotos().size();
 
         if (serverSideUpload) {
-            // Загружаем файл через сервис → возвращаем публичный URL
-            String url = storageService.upload(file, "ideas/" + ideaId);
-            String s3Key = storageService.extractKeyFromUrl(url);
+            // upload() теперь возвращает s3Key, а не URL
+            String s3Key = storageService.upload(file, "ideas/" + ideaId);
 
             IdeaPhoto photo = IdeaPhoto.builder()
                     .idea(idea)
@@ -142,7 +144,7 @@ public class IdeaService {
 
             return PhotoUploadResponse.builder()
                     .photoId(photo.getId())
-                    .url(url)
+                    .url(storageService.getPublicUrl(s3Key))
                     .build();
         } else {
             // Генерируем presigned URL — фронт загружает напрямую в S3
@@ -246,5 +248,4 @@ public class IdeaService {
         return "asc".equalsIgnoreCase(dir) ? Sort.by(field).ascending()
                 : Sort.by(field).descending();
     }
-
 }
