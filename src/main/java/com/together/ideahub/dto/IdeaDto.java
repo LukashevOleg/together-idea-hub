@@ -103,4 +103,11 @@ public class IdeaDto {
         @Size(max = 10)
         private Set<String> tags;
     }
+
+    // ── Ответ: статус сохранения ───────────────────────────────────────────
+    @Data @Builder @NoArgsConstructor @AllArgsConstructor
+    public static class SaveStatus {
+        private boolean saved;
+        private long    savesCount;
+    }
 }

@@ -2,6 +2,7 @@ package com.together.ideahub.controllers;
 
 import com.together.ideahub.dto.*;
 import com.together.ideahub.services.IdeaService;
+import com.together.ideahub.services.IdeaSaveService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * X-User-Id — заголовок, который API Gateway прокидывает после валидации JWT.
@@ -20,7 +22,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class IdeaController {
 
-    private final IdeaService ideaService;
+    private final IdeaService     ideaService;
+    private final IdeaSaveService saveService;
 
     // GET /api/ideas?search=&category=&priceFrom=&priceTo=&tags=&page=&size=&sortBy=&sortDir=
     @GetMapping
@@ -70,5 +73,48 @@ public class IdeaController {
             @RequestHeader("X-User-Id") Long userId) throws IOException {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ideaService.uploadPhoto(id, file, userId));
+    }
+
+    // GET /api/ideas/mine — только идеи текущего пользователя (требует JWT → X-User-Id)
+    @GetMapping("/mine")
+    public ResponseEntity<PageResponse<IdeaDto.Summary>> getMyIdeas(
+            @RequestHeader("X-User-Id") Long userId,
+            @ModelAttribute IdeaFilterRequest filter) {
+        filter.setAuthorUserId(userId);
+        filter.setIsUserCreated(true);
+        return ResponseEntity.ok(ideaService.getIdeas(filter));
+    }
+
+    // ── Сохранить/лайкнуть идею ───────────────────────────────────────────
+
+    // POST /api/ideas/{id}/save
+    @PostMapping("/{id}/save")
+    public ResponseEntity<IdeaDto.SaveStatus> save(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Id") Long userId) {
+        return ResponseEntity.ok(saveService.save(userId, id));
+    }
+
+    // DELETE /api/ideas/{id}/save
+    @DeleteMapping("/{id}/save")
+    public ResponseEntity<IdeaDto.SaveStatus> unsave(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Id") Long userId) {
+        return ResponseEntity.ok(saveService.unsave(userId, id));
+    }
+
+    // GET /api/ideas/{id}/save
+    @GetMapping("/{id}/save")
+    public ResponseEntity<IdeaDto.SaveStatus> saveStatus(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Id") Long userId) {
+        return ResponseEntity.ok(saveService.getStatus(userId, id));
+    }
+
+    // GET /api/ideas/saved  — список сохранённых текущим пользователем
+    @GetMapping("/saved")
+    public ResponseEntity<List<IdeaDto.Summary>> getSaved(
+            @RequestHeader("X-User-Id") Long userId) {
+        return ResponseEntity.ok(saveService.getSaved(userId));
     }
 }

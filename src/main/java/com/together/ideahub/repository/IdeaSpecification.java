@@ -57,6 +57,11 @@ public class IdeaSpecification {
                 predicates.add(cb.equal(root.get("isUserCreated"), filter.getIsUserCreated()));
             }
 
+            // Идеи конкретного автора (для /api/ideas/mine)
+            if (filter.getAuthorUserId() != null) {
+                predicates.add(cb.equal(root.get("authorUserId"), filter.getAuthorUserId()));
+            }
+
             // Cursor-based пагинация для свайп-ленты
             if (filter.getAfterId() != null) {
                 predicates.add(cb.greaterThan(root.get("id"), filter.getAfterId()));

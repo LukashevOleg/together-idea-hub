@@ -17,6 +17,12 @@ public class IdeaFilterRequest {
     private Boolean isUserCreated;
 
     /**
+     * Фильтр по автору — для GET /api/ideas/mine (свои идеи).
+     * Проставляется сервисом из X-User-Id, не из запроса пользователя.
+     */
+    private Long authorUserId;
+
+    /**
      * Курсор для свайп-ленты (cursor-based pagination).
      * Если передан — возвращаем только идеи с id > afterId.
      * Гарантирует что пользователь не увидит уже просмотренные идеи.
