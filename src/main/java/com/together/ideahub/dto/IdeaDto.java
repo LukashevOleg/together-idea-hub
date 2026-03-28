@@ -22,6 +22,7 @@ public class IdeaDto {
         private String location;
         private BigDecimal rating;
         private Integer reviewsCount;
+        private String description;    // описание идеи
         private String coverPhotoUrl;      // первое фото
         private List<String> tags;
         private Boolean isUserCreated;

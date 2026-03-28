@@ -204,6 +204,7 @@ public class IdeaService {
                 .priceFrom(idea.getPriceFrom())
                 .durationMin(idea.getDurationMin())
                 .location(idea.getLocation())
+                .description(idea.getDescription())
                 .rating(idea.getRating())
                 .reviewsCount(idea.getReviewsCount())
                 .coverPhotoUrl(coverUrl)

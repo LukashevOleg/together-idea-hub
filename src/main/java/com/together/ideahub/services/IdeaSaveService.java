@@ -71,6 +71,7 @@ public class IdeaSaveService {
                 .id(idea.getId())
                 .title(idea.getTitle())
                 .category(idea.getCategory())
+                .description(idea.getDescription())
                 .priceFrom(idea.getPriceFrom())
                 .durationMin(idea.getDurationMin())
                 .location(idea.getLocation())
