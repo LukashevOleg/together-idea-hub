@@ -84,6 +84,26 @@ public class ReviewService {
     }
 
     /**
+     * Сводка по идее: средний рейтинг + количество
+     */
+    @Transactional(readOnly = true)
+    public ReviewDto.AllIdeaReviewsResponse getAllIdeaReviews(Long ideaId) {
+        var reviews = reviewRepository.findAllByIdeaId(ideaId).stream()
+                .map(review ->
+                        ReviewDto.ReviewInfo.builder()
+                                .authorName(review.getAuthorName())
+                                .comment(review.getComment())
+                                .rating(review.getRating())
+                                .build()
+                ).toList();
+
+        return ReviewDto.AllIdeaReviewsResponse.builder()
+                .ideaId(ideaId)
+                .reviews(reviews)
+                .build();
+    }
+
+    /**
      * Отзыв текущего пользователя на идею
      */
     @Transactional(readOnly = true)

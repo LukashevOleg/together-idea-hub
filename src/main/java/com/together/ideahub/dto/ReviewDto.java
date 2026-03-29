@@ -39,6 +39,19 @@ public class ReviewDto {
         private long reviewCount;
     }
 
+    @Data @Builder
+    public static class ReviewInfo {
+        private Integer rating;   // 1–5
+        private String comment;
+        private String authorName;
+    }
+
+    @Data @Builder
+    public static class AllIdeaReviewsResponse {
+        private Long ideaId;
+        List<ReviewInfo> reviews;
+    }
+
     /** Страница отзывов + сводка */
     @Data @Builder
     public static class PagedResponse {

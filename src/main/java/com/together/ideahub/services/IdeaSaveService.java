@@ -32,7 +32,7 @@ public class IdeaSaveService {
             saveRepo.save(IdeaSave.builder().userId(userId).idea(idea).build());
         }
 
-        return new IdeaDto.SaveStatus(true, saveRepo.countByIdeaId(ideaId));
+        return new IdeaDto.SaveStatus(true);
     }
 
     // ── Убрать лайк ───────────────────────────────────────────────────────
@@ -40,7 +40,7 @@ public class IdeaSaveService {
     @Transactional
     public IdeaDto.SaveStatus unsave(Long userId, Long ideaId) {
         saveRepo.deleteByUserIdAndIdeaId(userId, ideaId);
-        return new IdeaDto.SaveStatus(false, saveRepo.countByIdeaId(ideaId));
+        return new IdeaDto.SaveStatus(false);
     }
 
     // ── Статус ────────────────────────────────────────────────────────────
@@ -48,7 +48,7 @@ public class IdeaSaveService {
     @Transactional(readOnly = true)
     public IdeaDto.SaveStatus getStatus(Long userId, Long ideaId) {
         boolean saved = saveRepo.existsByUserIdAndIdeaId(userId, ideaId);
-        return new IdeaDto.SaveStatus(saved, saveRepo.countByIdeaId(ideaId));
+        return new IdeaDto.SaveStatus(saved);
     }
 
     // ── Список сохранённых (для DateModePage вкладка "Сохранённое") ───────

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
@@ -14,6 +15,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Page<Review> findByIdeaIdOrderByCreatedAtDesc(Long ideaId, Pageable pageable);
 
     Optional<Review> findByUserIdAndIdeaId(Long userId, Long ideaId);
+
+    List<Review> findAllByIdeaId(Long ideaId);
 
     boolean existsByUserIdAndIdeaId(Long userId, Long ideaId);
 

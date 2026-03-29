@@ -52,6 +52,16 @@ public class ReviewController {
         return reviewService.getSummary(ideaId);
     }
 
+
+    /**
+     * Сводка (средний рейтинг + количество) — для ленты.
+     * GET /api/reviews/idea/42/summary
+     */
+    @GetMapping("/idea/{ideaId}/all")
+    public ReviewDto.AllIdeaReviewsResponse getAllIdeaReviews(@PathVariable Long ideaId) {
+        return reviewService.getAllIdeaReviews(ideaId);
+    }
+
     /**
      * Мой отзыв на идею (чтобы знать, ставил ли я уже оценку).
      * GET /api/reviews/idea/42/mine

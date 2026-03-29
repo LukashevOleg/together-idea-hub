@@ -109,6 +109,5 @@ public class IdeaDto {
     @Data @Builder @NoArgsConstructor @AllArgsConstructor
     public static class SaveStatus {
         private boolean saved;
-        private long    savesCount;
     }
 }
