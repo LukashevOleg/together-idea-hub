@@ -58,6 +58,18 @@ public class Idea {
     @Builder.Default
     private Integer reviewsCount = 0;
 
+    @Column(name = "weather_condition")
+    private String weatherCondition; // OUTDOOR_ONLY | INDOOR_ONLY | ANY
+
+    @Column(name = "time_of_day")
+    private String timeOfDay;// MORNING | AFTERNOON | EVENING | ANY
+
+    @Column(name = "requires_booking")
+    private Boolean requiresBooking; // нужна ли бронь заранее
+
+    @Column(name = "city_relevance")
+    private String cityRelevance;    // CITY_SPECIFIC | ANY
+
     @Column(name = "author_user_id")
     private Long authorUserId;         // ID из auth-service
 
